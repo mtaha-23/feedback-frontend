@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Feedback Form</title>
+</head>
+<body>
+  <h2>Submit Feedback</h2>
+  <form id="feedbackForm">
+    <label>Rating (1–5):</label><br>
+    <input type="number" id="rating" required><br><br>
+
+    <label>Email:</label><br>
+    <input type="email" id="email" required><br><br>
+
+    <label>Comments:</label><br>
+    <textarea id="comments" rows="4"></textarea><br><br>
+
+    <button type="submit">Submit</button>
+  </form>
+
+  <p id="responseMessage"></p>
+
+  <script>
+    document.getElementById("feedbackForm").addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const rating = document.getElementById("rating").value;
+      const email = document.getElementById("email").value;
+      const comments = document.getElementById("comments").value;
+
+      const response = await fetch("http://localhost:5500/submit-feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ rating, email, comments })
+      });
+
+      const result = await response.json();
+      document.getElementById("responseMessage").innerText = result.message;
+      document.getElementById("feedbackForm").reset();
+    });
+  </script>
+</body>
+</html>
